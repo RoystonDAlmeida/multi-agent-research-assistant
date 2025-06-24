@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+python-dotenv
+supabase
+langchain
+langgraph
+langsmith
+google-generativeai
+httpx>=0.23.0,<0.24.0
+pydantic>=1.10.0,<2.0.0
