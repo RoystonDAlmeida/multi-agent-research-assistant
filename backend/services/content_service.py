@@ -90,11 +90,20 @@ class ContentService:
         try:
             section_drafts = []
             
+            # Prepare sources text with URLs for the LLM prompt
+            sources_text = "\n".join([
+                f"- {result['title']}: {result['snippet']} ({result.get('url', '')})"
+                for result in search_results[:5]
+            ])
+            
             for section in sections:
                 prompt = f"""
                 Write comprehensive content for this research section: {section['title']}
                 Topic context: {query['topic']}
                 Research depth: {query.get('depth', 'basic')}
+                
+                Use the following sources for your research. Where you use information from these sources, include the actual URL in your text:
+                {sources_text}
                 
                 Create detailed, factual content including:
                 - Current research findings with specific data points
@@ -103,13 +112,11 @@ class ContentService:
                 - Quantitative data and statistics where relevant
                 - Evidence-based analysis
                 
-                Write in a professional, academic tone.
-                Include specific details and avoid generic statements.
-                Do NOT include placeholder citations like "Insert URL" or "Replace with specific sources".
+                Where you use information from the sources above, cite the actual URL in your text. Do NOT include placeholder citations like "Insert URL" or "Replace with specific sources". Only use real URLs from the list above.
                 Focus on providing substantive analysis with concrete examples.
                 """
                 
-                system_instruction = f"You are an expert researcher writing detailed analysis on {query['topic']}. Provide specific, factual content with concrete examples and data points. Avoid placeholder text."
+                system_instruction = f"You are an expert researcher writing detailed analysis on {query['topic']}. Provide specific, factual content with concrete examples and data points. Avoid placeholder text. Cite real URLs from the provided sources where relevant."
                 
                 content = await self.gemini.generate_content(prompt, system_instruction)
                 content = self._clean_content(content)
@@ -157,7 +164,7 @@ class ContentService:
                 - Removing any placeholder text or generic statements
                 - Adding concrete details and evidence
                 
-                Maintain the existing citations and add new ones where appropriate.
+                Maintain the existing citations.
                 Focus on factual accuracy and specificity.
                 """
                 

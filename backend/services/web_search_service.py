@@ -46,14 +46,6 @@ class WebSearchService:
                                     'source': 'web'
                                 })
                     
-                    # Statically add a link to Google Scholar to encourage deeper academic research.
-                    results.append({
-                        'title': f"Academic Research on {topic}",
-                        'url': 'https://scholar.google.com/scholar?q=' + search_query,
-                        'snippet': f"Explore academic papers and journals related to {topic} on Google Scholar.",
-                        'source': 'academic'
-                    })
-                    
                     return results
                     
                 else:
