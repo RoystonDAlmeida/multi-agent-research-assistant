@@ -113,6 +113,15 @@ async def get_current_user_and_token(credentials: HTTPAuthorizationCredentials =
 
 # --- API Endpoints ---
 
+# Health check endpoint
+@app.get("/api/health")
+def health_check():
+    """
+    Health check endpoint to verify the backend is running.
+    Returns a simple JSON response.
+    """
+    return {"status": "ok", "message": "Backend is running"}
+
 @app.post("/api/research-agent", response_model=ResearchResponse)
 async def start_research_workflow(
     request: ResearchRequestModel,
