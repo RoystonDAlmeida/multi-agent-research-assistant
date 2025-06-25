@@ -95,41 +95,34 @@ const Auth = () => {
       // This provides more specific feedback than the generic signUp error.
       const { error: signInError } = await signIn(email, password);
       
-      // Based on the result of the pre-flight check, proceed with sign-up or show an error.
-      if (signInError) {
-        if (signInError.message.includes('User not found')) {
-          // User does not exist, proceed with sign up
-          const { error } = await signUp(email, password, fullName);
-          if (error) {
-            // Check for Supabase error codes for already registered users
-            const code = error.code || error.status || '';
-            if (
-              code === 'user_already_exists' ||
-              code === 'email_exists' ||
-              code === 'email_conflict' ||
-              (error.message && error.message.toLowerCase().includes('already registered'))
-            ) {
-              toast.error('An account with this email already exists. Please sign in instead.');
-            } else if (error.message && error.message.includes('Password should be at least 6 characters')) {
-              toast.error('Password should be at least 6 characters long.');
-            } else if (error.message && error.message.includes('Invalid email')) {
-              toast.error('Please enter a valid email address.');
-            } else {
-              toast.error(error.message);
-            }
-          } else {
-            toast.success('Account created successfully! Please check your email to verify your account.');
-          }
-        } else if (signInError.message.includes('Email not confirmed')) {
-          toast.error('This email is already registered but not confirmed. Please check your email for the confirmation link or resend it.');
-        } else if (signInError.message.includes('Invalid login credentials')) {
-          toast.error('An account with this email already exists. Please sign in instead.');
-        } else {
-          toast.error(signInError.message);
-        }
-      } else {
-        // If sign in succeeds, user is already registered and confirmed
+      // If sign in succeeds, user is already registered and confirmed
+      if (!signInError) {
         toast.error('An account with this email already exists. Please sign in instead.');
+      } else if (signInError.message.includes('Email not confirmed')) {
+        toast.error('This email is already registered but not confirmed. Please check your email for the confirmation link or resend it.');
+      } else {
+        // For any other sign-in error (including 'User not found' and 'Invalid login credentials'), proceed with sign up
+        const { error } = await signUp(email, password, fullName);
+        if (error) {
+          // Check for Supabase error codes for already registered users
+          const code = error.code || error.status || '';
+          if (
+            code === 'user_already_exists' ||
+            code === 'email_exists' ||
+            code === 'email_conflict' ||
+            (error.message && error.message.toLowerCase().includes('already registered'))
+          ) {
+            toast.error('An account with this email already exists. Please sign in instead.');
+          } else if (error.message && error.message.includes('Password should be at least 6 characters')) {
+            toast.error('Password should be at least 6 characters long.');
+          } else if (error.message && error.message.includes('Invalid email')) {
+            toast.error('Please enter a valid email address.');
+          } else {
+            toast.error(error.message);
+          }
+        } else {
+          toast.success('Account created successfully! Please check your email to verify your account.');
+        }
       }
     } catch (error) {
       toast.error('An unexpected error occurred');
