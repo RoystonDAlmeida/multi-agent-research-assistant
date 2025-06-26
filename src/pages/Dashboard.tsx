@@ -13,6 +13,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext
 import { useToast } from '@/components/ui/use-toast';
 import { useRealtimeProgress } from '@/hooks/useRealtimeProgress';
 import { Helmet } from 'react-helmet-async';
+import { supabase } from '@/integrations/supabase/client';
 
 /**
  * Dashboard component serves as the main landing page for authenticated users.
@@ -32,6 +33,8 @@ const Dashboard = () => {
   // State to track the newly created query for highlighting and scrolling.
   const [selectedQueryId, setSelectedQueryId] = useState<string | null>(null);
   const [lastQueryCount, setLastQueryCount] = useState(0);
+  // State for user default research depth
+  const [defaultDepth, setDefaultDepth] = useState('comprehensive');
 
   /**
    * Effect hook to enforce authentication. Redirects to the '/auth' page
@@ -49,6 +52,22 @@ const Dashboard = () => {
       setLastQueryCount(queries.length);
     }
   }, [queries]);
+
+  // Fetch user default research depth on mount
+  useEffect(() => {
+    const fetchDefaultDepth = async () => {
+      if (!user) return;
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('default_depth')
+        .eq('id', user.id)
+        .single();
+      if (!error && data && data.default_depth) {
+        setDefaultDepth(data.default_depth);
+      }
+    };
+    fetchDefaultDepth();
+  }, [user]);
 
   /**
    * Handles the submission of the research form.
@@ -296,7 +315,7 @@ const Dashboard = () => {
 
           {/* The main form for initiating a new research query. */}
           <div className="w-full">
-            <ResearchForm onSubmit={handleQuerySubmit} isLoading={isCreating} />
+            <ResearchForm onSubmit={handleQuerySubmit} isLoading={isCreating} defaultDepth={defaultDepth} />
           </div>
         </div>
       </main>
