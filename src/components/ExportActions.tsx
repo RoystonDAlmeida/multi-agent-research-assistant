@@ -282,16 +282,16 @@ const ExportActions = ({ query, results }: ExportActionsProps) => {
   };
 
   return (
-    <div className="flex space-x-2">
+    <div className="flex flex-col gap-2 w-full sm:flex-row sm:space-x-2 sm:gap-0 sm:w-auto">
       {/* Download as HTML (PDF) */}
-      <Button variant="outline" size="sm" onClick={handleDownloadPDF}>
+      <Button variant="outline" size="sm" onClick={handleDownloadPDF} className="w-full sm:w-auto">
         Download PDF
       </Button>
       
       {/* Export as JSON or TXT */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" className="w-full sm:w-auto">
             Export <ChevronDown className="ml-1 h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
@@ -306,7 +306,7 @@ const ExportActions = ({ query, results }: ExportActionsProps) => {
       </DropdownMenu>
       
       {/* Share via email or Web Share API */}
-      <Button size="sm" className="bg-gradient-to-r from-blue-600 to-purple-600" onClick={handleShare}>
+      <Button size="sm" className="bg-gradient-to-r from-blue-600 to-purple-600 w-full sm:w-auto" onClick={handleShare}>
         <Mail className="mr-1 h-4 w-4" />
         Share via Email
       </Button>
