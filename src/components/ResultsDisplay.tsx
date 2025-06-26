@@ -73,18 +73,20 @@ const ResultsDisplay = ({ query, onFeedback }: ResultsDisplayProps) => {
       {/* Header card with export actions */}
       <Card className="bg-white/90 backdrop-blur-sm shadow-lg border-white/20">
         <CardHeader>
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-2 items-start sm:flex-row sm:items-center sm:justify-between w-full">
             <CardTitle className="text-2xl font-bold text-gray-800">
               Research Complete
             </CardTitle>
-            <ExportActions query={query} results={results} />
+            <div className="w-full sm:w-auto flex justify-start sm:justify-end">
+              <ExportActions query={query} results={results} />
+            </div>
           </div>
         </CardHeader>
       </Card>
 
       {/* Tabs for preview, sources, perspectives, and feedback */}
       <Tabs value={selectedFormat} onValueChange={setSelectedFormat} className="space-y-4">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-4 gap-2 my-2 overflow-x-auto sm:overflow-visible min-w-0">
           <TabsTrigger value="preview">Preview</TabsTrigger>
           <TabsTrigger value="sources">Sources ({sources.length})</TabsTrigger>
           <TabsTrigger value="perspectives">Perspectives ({perspectives.length})</TabsTrigger>
