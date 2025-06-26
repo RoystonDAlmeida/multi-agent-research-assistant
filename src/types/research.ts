@@ -3,7 +3,7 @@
 // Represents a research query submitted by the user
 export interface ResearchQuery {
   topic: string; // The research topic
-  depth: 'basic' | 'comprehensive' | 'expert'; // Level of detail requested
+  depth: 'Basic Overview' | 'Comprehensive Analysis' | 'Expert-Level Deep Dive'; // Level of detail requested
   perspectives: string[]; // Stakeholder perspectives to include
   format: 'markdown'// Output format
   sources: string[]; // List of source URLs or identifiers
