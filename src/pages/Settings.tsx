@@ -13,8 +13,9 @@ import { Helmet } from 'react-helmet-async';
 // Settings page for user profile and research preferences
 const Settings = () => {
   const { user } = useAuth();
-  // State for display name and loading status
+  // State for display name, default depth, and loading status
   const [displayName, setDisplayName] = useState(user?.user_metadata?.full_name || '');
+  const [defaultDepth, setDefaultDepth] = useState('comprehensive');
   const [loading, setLoading] = useState(false);
 
   // Fetch profile preferences from DB on mount or when user changes
@@ -36,6 +37,7 @@ const Settings = () => {
       }
       if (data) {
         setDisplayName(data.full_name || '');
+        setDefaultDepth(data.default_depth || 'comprehensive');
       }
     };
     fetchProfile();
@@ -50,6 +52,7 @@ const Settings = () => {
       .from('profiles')
       .update({
         full_name: displayName,
+        default_depth: defaultDepth,
       })
       .eq('id', user.id);
     // Update Supabase Auth user metadata
@@ -109,15 +112,14 @@ const Settings = () => {
               <CardContent className="space-y-4">
                 <div>
                   <Label htmlFor="depth">Default Research Depth</Label>
-                  {/* Default research depth (not yet wired to DB) */}
-                  <Select name="defaultDepth" value="comprehensive">
+                  <Select name="defaultDepth" value={defaultDepth} onValueChange={setDefaultDepth}>
                     <SelectTrigger id="depth">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="basic">Basic</SelectItem>
-                      <SelectItem value="comprehensive">Comprehensive</SelectItem>
-                      <SelectItem value="expert">Expert</SelectItem>
+                      <SelectItem value="basic">Basic Overview</SelectItem>
+                      <SelectItem value="comprehensive">Comprehensive Analysis</SelectItem>
+                      <SelectItem value="expert">Expert-Level Deep Dive</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
