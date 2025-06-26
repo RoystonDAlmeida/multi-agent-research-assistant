@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -12,10 +12,12 @@ import { ResearchQuery } from '../types/research';
  * Props for the ResearchForm component.
  * @param onSubmit A callback function that is executed when the form is submitted with valid data.
  * @param isLoading A boolean to indicate if the form submission is currently in progress, used to disable the submit button.
+ * @param defaultDepth The default depth for the research query.
  */
 interface ResearchFormProps {
   onSubmit: (query: ResearchQuery) => void;
   isLoading?: boolean;
+  defaultDepth?: string;
 }
 
 /**
@@ -23,16 +25,28 @@ interface ResearchFormProps {
  * It includes fields for the topic, research depth, output format, perspectives,
  * preferred sources, and an optional timeframe.
  */
-const ResearchForm = ({ onSubmit, isLoading = false }: ResearchFormProps) => {
+const ResearchForm = ({ onSubmit, isLoading = false, defaultDepth = 'comprehensive' }: ResearchFormProps) => {
   // State to manage all the form's input values.
   const [formData, setFormData] = useState({
     topic: '',
-    depth: 'comprehensive' as const,
+    depth: defaultDepth,
     perspectives: [] as string[],
     format: 'markdown' as const,
     sources: [] as string[],
     timeframe: ''
   });
+
+  // Update formData.depth if defaultDepth prop changes
+  useEffect(() => {
+    setFormData(prev => ({ ...prev, depth: defaultDepth }));
+  }, [defaultDepth]);
+
+  // Map internal depth values to labels expected by ResearchQuery
+  const depthLabelMap: Record<string, string> = {
+    basic: "Basic Overview",
+    comprehensive: "Comprehensive Analysis",
+    expert: "Expert-Level Deep Dive"
+  };
 
   /**
    * Handles the form submission process.
@@ -45,11 +59,15 @@ const ResearchForm = ({ onSubmit, isLoading = false }: ResearchFormProps) => {
     // Basic validation to ensure a topic is entered.
     if (!formData.topic.trim()) return;
     
-    onSubmit(formData);
+    onSubmit({
+      ...formData,
+      depth: depthLabelMap[formData.depth] as "Basic Overview" | "Comprehensive Analysis" | "Expert-Level Deep Dive"
+    });
+    
     // Reset form fields after submission for a clean user experience.
     setFormData({
       topic: '',
-      depth: 'comprehensive',
+      depth: defaultDepth,
       perspectives: [],
       format: 'markdown',
       sources: [],
