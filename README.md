@@ -17,9 +17,28 @@
 
 ---
 
+## 🎬 Demo
+
+> **Click an image below to play the full demo GIF!**
+
+<p align="center">
+  <a href="public/research_query_demo.gif" target="_blank">
+    <img src="public/research_query_demo_preview.png" alt="Research Query Demo" width="400"/><br>
+    <b>1. Submitting a Research Query</b>
+  </a>
+  <br><br>
+  <a href="public/research_query_result_demo.gif" target="_blank">
+    <img src="public/research_query_result_demo_preview.png" alt="Research Query Result Demo" width="400"/><br>
+    <b>2. Viewing Research Results</b>
+  </a>
+</p>
+
+---
+
 ## Contents
 
 - [Overview](#-overview)
+- [Demo](#-demo)
 - [Features](#-features)
 - [Architecture & Workflow](#-architecture--workflow)
   - [How it Works](#how-it-works)
