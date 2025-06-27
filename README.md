@@ -53,6 +53,9 @@
 
 ## 🧩 Architecture & Workflow
 
+<p align="center">
+  <img src="public/architecture.png" alt="Architecture Diagram" width="250"/>
+</p>
 
 ### How it Works
 - **User** interacts with the web UI to submit research queries and view results.
