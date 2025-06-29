@@ -210,5 +210,3 @@ Thank you for helping improve Multi-Agent Researcher!
 ## 📚 License
 
 This project is licensed under the [MIT](https://opensource.org/licenses/MIT) License.
-
----
